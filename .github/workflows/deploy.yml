@@ -1,0 +1,26 @@
+name: Test ACR Connectivity
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows you to manually trigger the test from the "Actions" tab
+
+jobs:
+  test-connection:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Attempt to log into your Azure Container Registry
+    - name: Test ACR Login
+      uses: azure/docker-login@v2
+      with:
+        login-server: ${{ secrets.ACR_REGISTRY }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+
+    # 2. Confirm successful authentication by running a basic docker command
+    - name: Verify Authentication Status
+      run: |
+        echo "Authentication successful! Fetching docker info..."
+        docker info

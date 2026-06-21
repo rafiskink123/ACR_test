@@ -1,26 +1,31 @@
-name: Test ACR Connectivity
+name: Build and Push PHP Image to ACR
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch: # Allows you to manually trigger the test from the "Actions" tab
+  workflow_dispatch: # Keeps the manual trigger button active
 
 jobs:
-  test-connection:
-    runs-on: ubuntu-latest
+  build-and-push:
+    runs-on: ubuntu-latest 
 
     steps:
-    # 1. Attempt to log into your Azure Container Registry
-    - name: Test ACR Login
+    # 1. Pull down your repository code (including Dockerfile and PHP files)
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 2. Log into your Azure Container Registry using the verified credentials
+    - name: ACR Login
       uses: azure/docker-login@v2
       with:
         login-server: ${{ secrets.ACR_REGISTRY }}
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
 
-    # 2. Confirm successful authentication by running a basic docker command
-    - name: Verify Authentication Status
+    # 3. Build the Docker image from your Dockerfile and push it to ACR
+    - name: Build and Push Docker Image
       run: |
-        echo "Authentication successful! Fetching docker info..."
-        docker info
+        docker build -t ${{ secrets.ACR_REGISTRY }}/php-app:${{ github.sha }} -t ${{ secrets.ACR_REGISTRY }}/php-app:latest .
+        docker push ${{ secrets.ACR_REGISTRY }}/php-app:${{ github.sha }}
+        docker push ${{ secrets.ACR_REGISTRY }}/php-app:latest

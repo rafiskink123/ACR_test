@@ -5,7 +5,7 @@ RUN docker-php-ext-install pdo pdo_mysql
 
 WORKDIR /var/www/html
 
-# CHANGE: Copy specifically from the src folder into Apache
+# CHANGE: Copy specifically from the src folder into Apache_
 COPY src/ /var/www/html/
 
 EXPOSE 80

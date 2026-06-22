@@ -16,7 +16,7 @@
 
 <div class="container">
     <h1>Dockerized PHP Application</h1>
-    <div class="status">✓ Successfully Running in Azure Container Registry</div>
+    <div class="status">✓ ___**Successfully Running in Azure Container Registry</div>
     
     <p>This page confirms that your GitHub Actions pipeline successfully built your custom Apache image and deployed it.</p>
     
